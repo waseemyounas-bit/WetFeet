@@ -12,5 +12,6 @@ namespace Business.IServices
         Task<LoginResponseDto> Login(LoginDto loginDto);
         Task<String> Register(RegistrationDto registrationDto);
         Task<bool> AssignRole(string email, string role);
+        Task<string> GetUserIdByEmail(string email);
     }
 }

@@ -89,16 +89,6 @@ namespace Business.Services
                 var result = await _userManager.CreateAsync(appUser, registrationDto.Password);
                 if (result.Succeeded)
                 {
-                    var user = this._dbContext.ApplicationUsers.First(x => x.UserName == registrationDto.Email);
-
-                    UserDto userDto = new()
-                    {
-                        Id = user.Id,
-                        Email = user.Email,
-                        Name = user.FirstName,
-                        PhoneNumber = user.PhoneNumber
-                    };
-
                     return "";
                 }
                 else
@@ -112,6 +102,14 @@ namespace Business.Services
             }
 
             return "An Error Occured";
+        }
+
+        public async Task<string> GetUserIdByEmail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if(user != null)
+                return user.Id;
+            return "";
         }
     }
 }
