@@ -13,12 +13,13 @@ namespace WetFeetAPI.Controllers
         private readonly IAuthService _authService;
         private readonly IConfiguration _configuration;
         protected readonly ResponseDto _response;
-
-        public AuthController(IAuthService authService, IConfiguration configuration)
+        private readonly IHostEnvironment _env;
+        public AuthController(IAuthService authService, IHostEnvironment env, IConfiguration configuration)
         {
             this._authService = authService;
             this._configuration = configuration;
             this._response = new();
+            _env = env;
         }
 
         [HttpPost("register")]
@@ -46,8 +47,52 @@ namespace WetFeetAPI.Controllers
                 _response.Message = "Username or password is incorrect";
                 return BadRequest(_response);
             }
+            _response.IsSuccess = true;
+            _response.Message = "You have logged in successfully.";
             _response.Result = loginResponse;
             return Ok(_response);
+        }
+
+        [HttpPost("updateprofile")]
+        //[Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdateProfile([FromForm] RegistrationDto model)
+        {
+            var image = Request.Form.Files.First();
+            var uniqueFileName = GetUniqueFileName(image.FileName);
+            var dir = Path.Combine(_env.ContentRootPath, "UserProfile");
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+            var filePath = Path.Combine(dir, uniqueFileName);
+            await image.CopyToAsync(new FileStream(filePath, FileMode.Create));
+            model.ImageName = uniqueFileName;
+            var errorMessage = await _authService.Register(model);
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                _response.IsSuccess = false;
+                _response.Message = errorMessage;
+                return BadRequest(_response);
+            }
+            _response.IsSuccess = true;
+            _response.Message = "Your profile has been updated successfully.";
+            _response.Result = model;
+            return Ok(_response);
+        }
+
+        [HttpPost]
+        private string GetUniqueFileName(string fileName)
+        {
+            fileName = Path.GetFileName(fileName);
+            return Path.GetFileNameWithoutExtension(fileName)
+                   + "_"
+                   + Guid.NewGuid().ToString().Substring(0, 4)
+                   + Path.GetExtension(fileName);
+        }
+
+        private void SaveImagePathToDb(string description, string filepath)
+        {
+            //todo: description and file path to db
         }
 
         [HttpPost("assignrole")]

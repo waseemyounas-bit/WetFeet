@@ -60,8 +60,12 @@ namespace Business.Services
             {
                 Id = user.Id,
                 Email = user.Email,
-                Name = user.FirstName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
+                Password=user.PasswordHash,
+                About=user.About,
+                ImageName=user.ImageName
             };
 
             var loginResponseDto = new LoginResponseDto()
@@ -76,10 +80,11 @@ namespace Business.Services
         {
             ApplicationUser appUser = new()
             {
+                FirstName=registrationDto.FirstName,
+                LastName=registrationDto.LastName,
                 UserName = registrationDto.Email,
                 Email = registrationDto.Email,
                 NormalizedEmail = registrationDto.Email.ToUpper(),
-                FirstName = registrationDto.Name,
                 PhoneNumber = registrationDto.PhoneNumber,
                 ImageName = registrationDto.ImageName,
             };
@@ -95,8 +100,12 @@ namespace Business.Services
                     {
                         Id = user.Id,
                         Email = user.Email,
-                        Name = user.FirstName,
-                        PhoneNumber = user.PhoneNumber
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        PhoneNumber = user.PhoneNumber,
+                        ImageName=user.ImageName,
+                        Password=user.PasswordHash,
+                        About=user.About
                     };
 
                     return "";
