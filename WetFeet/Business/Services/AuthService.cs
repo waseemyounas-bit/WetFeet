@@ -122,5 +122,13 @@ namespace Business.Services
 
             return "An Error Occured";
         }
+
+        public async Task<string> GetUserIdByEmail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if(user != null)
+                return user.Id;
+            return "";
+        }
     }
 }

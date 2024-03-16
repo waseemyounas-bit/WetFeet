@@ -19,6 +19,8 @@ namespace Data.Context
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
+        public DbSet<UserSubscriptionPlan> UserSubscriptionPlans { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -27,6 +29,11 @@ namespace Data.Context
                new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Creator", NormalizedName = "Creator", ConcurrencyStamp = "2" },
                new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Audience", NormalizedName = "Audience", ConcurrencyStamp = "3" }
            );
+
+            modelBuilder.Entity<SubscriptionPlan>().HasData(
+                new SubscriptionPlan() { Id = Guid.NewGuid(), Details = "Basic plan", MonthlyAmount = 3.99, YearlyAmount= 39.99 }
+                );
+
         }
     }
 }

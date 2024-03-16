@@ -1,11 +1,15 @@
+using AutoMapper;
 using Business.IServices;
 using Business.Services;
 using Data;
 using Data.Context;
 using Data.Entities;
+using DataAccess.Repository;
+using DataAccess.UoW;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using WetFeetAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,10 +25,17 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<DataContext>()
     .AddDefaultTokenProviders();
 
+//Add AutoMapper
+IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+builder.Services.AddSingleton(mapper);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IUnitofWork, UnitofWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddCors();
+builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
