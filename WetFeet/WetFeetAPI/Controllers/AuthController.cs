@@ -63,12 +63,14 @@ namespace WetFeetAPI.Controllers
         }
 
         [HttpPost("updateprofile")]
-        //[Consumes("multipart/form-data")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> UpdateProfile([FromForm] RegistrationDto model)
         {
+            if (model.Pic.Length>0)
+            {
             var image = Request.Form.Files.First();
             var uniqueFileName = GetUniqueFileName(image.FileName);
-            var dir = Path.Combine(_env.ContentRootPath, "UserProfile");
+            var dir = Path.Combine(_env.ContentRootPath, "wwwroot/UserProfile");
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -76,7 +78,8 @@ namespace WetFeetAPI.Controllers
             var filePath = Path.Combine(dir, uniqueFileName);
             await image.CopyToAsync(new FileStream(filePath, FileMode.Create));
             model.ImageName = uniqueFileName;
-            var errorMessage = await _authService.Register(model);
+            }
+            var errorMessage = await _authService.UpdateUser(model);
             if (!string.IsNullOrEmpty(errorMessage))
             {
                 _response.IsSuccess = false;
@@ -131,7 +134,7 @@ namespace WetFeetAPI.Controllers
             _response.Result = model;
             await _authService.AssignRole(model.RegistrationDto.Email, model.RegistrationDto.Role.ToUpper());
 
-            var userId = await _authService.GetUserIdByEmail(model.RegistrationDto.Email);
+            var user = await _authService.GetUserIdByEmail(model.RegistrationDto.Email);
             var subscriptionPlan = this._subscriptionService.GetSubscriptionPlan(model.SubscriptionId);
             var amount = model.Type == SubscriptionType.Monthly ? subscriptionPlan.MonthlyAmount : subscriptionPlan.YearlyAmount;
             var userSubscriptionPlan = new UserSubscriptionPlan
@@ -139,7 +142,7 @@ namespace WetFeetAPI.Controllers
                 SubscriptionId = subscriptionPlan.Id,
                 Amount = amount,
                 Type = model.Type,
-                UserId = userId,
+                UserId = user.Id,
                 IsActive = true,
                 ActivatedDate = DateTime.UtcNow
             };
