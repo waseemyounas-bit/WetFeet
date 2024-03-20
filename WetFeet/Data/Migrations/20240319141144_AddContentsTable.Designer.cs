@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240315202544_AddSubscriptionPlanTables")]
-    partial class AddSubscriptionPlanTables
+    [Migration("20240319141144_AddContentsTable")]
+    partial class AddContentsTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,6 +29,9 @@ namespace Data.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("About")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -99,6 +102,49 @@ namespace Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.Content", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContentType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Contents");
+                });
+
             modelBuilder.Entity("Data.Entities.SubscriptionPlan", b =>
                 {
                     b.Property<Guid>("Id")
@@ -124,7 +170,7 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d4c07d14-76a4-457b-b970-e5406007f3d7"),
+                            Id = new Guid("05a0f457-ba5a-4037-aa46-3344bc3f9246"),
                             Details = "Basic plan",
                             IsActive = true,
                             MonthlyAmount = 3.9900000000000002,
@@ -200,14 +246,14 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "cb69fee9-e711-466d-8253-4828c625a232",
+                            Id = "9297b966-ebd4-4437-a676-664399154daa",
                             ConcurrencyStamp = "2",
                             Name = "Creator",
                             NormalizedName = "Creator"
                         },
                         new
                         {
-                            Id = "6f2c2c6a-8242-48e3-8433-47ddadef44ec",
+                            Id = "cf8c36bf-e3cc-427f-b817-90f58a46cbec",
                             ConcurrencyStamp = "3",
                             Name = "Audience",
                             NormalizedName = "Audience"
@@ -318,6 +364,15 @@ namespace Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.Content", b =>
+                {
+                    b.HasOne("Data.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("Data.Entities.UserSubscriptionPlan", b =>

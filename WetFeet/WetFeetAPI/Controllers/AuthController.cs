@@ -32,7 +32,7 @@ namespace WetFeetAPI.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegistrationDto registrationDto)
+        public async Task<IActionResult> Register(RegistrationDto registrationDto)
         {
             var errorMessage = await _authService.Register(registrationDto);
             if (!string.IsNullOrEmpty(errorMessage))

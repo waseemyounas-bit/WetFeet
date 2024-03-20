@@ -13,6 +13,6 @@ namespace DataAccess.Repository
 		T GetById(string id);
 		void Update(T entity);
 		public List<T> GetDataFiltered(Expression<Func<T, bool>> condition);
-
-	}
+        public IQueryable<T> GetIQuerableDataFiltered(Expression<Func<T, bool>> condition);
+    }
 }

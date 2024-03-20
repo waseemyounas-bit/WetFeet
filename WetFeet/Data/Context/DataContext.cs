@@ -21,6 +21,8 @@ namespace Data.Context
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
         public DbSet<UserSubscriptionPlan> UserSubscriptionPlans { get; set; }
+        public DbSet<Content> Contents { get; set; }
+        public DbSet<ContentFile> ContentFiles { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

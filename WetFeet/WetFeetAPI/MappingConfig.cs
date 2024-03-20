@@ -11,6 +11,7 @@ namespace WetFeetAPI
             var mappingConfig = new MapperConfiguration(config =>
             {
                 config.CreateMap<SubscriptionPlan, SubscriptionPlanDto>().ReverseMap();
+                config.CreateMap<Content, ContentDto>();
             }
             );
 

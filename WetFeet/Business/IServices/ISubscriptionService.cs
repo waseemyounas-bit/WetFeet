@@ -12,9 +12,7 @@ namespace Business.IServices
     {
         List<SubscriptionPlan> GetAllSubscriptionPlans();
         SubscriptionPlan GetSubscriptionPlan(Guid id);
-
         int AddUserSubscriptionPlan(UserSubscriptionPlan userSubscriptionPlan);
-
         List<UserSubscriptionPlan> GetUserSubscriptionPlans(string userId);
     }
 }

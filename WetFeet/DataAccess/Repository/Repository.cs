@@ -60,5 +60,9 @@ namespace DataAccess.Repository
             return table.Where(condition).ToList();
         }
 
-	}
+        public IQueryable<T> GetIQuerableDataFiltered(Expression<Func<T, bool>> condition)
+        {
+            return table.Where(condition);
+        }
+    }
 }
