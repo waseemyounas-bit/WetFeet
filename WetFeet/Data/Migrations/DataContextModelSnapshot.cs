@@ -183,7 +183,7 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7dfa5ace-2790-4132-9f5b-06754a1a3411"),
+                            Id = new Guid("00f259ca-eec6-4657-9553-29a8855f5a37"),
                             Details = "Basic plan",
                             IsActive = true,
                             MonthlyAmount = 3.9900000000000002,
@@ -259,14 +259,14 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6fdd3547-1bab-4bf6-9704-ddbf0ba92c85",
+                            Id = "6021ebe1-6f66-4eb2-a048-e732e39be5d2",
                             ConcurrencyStamp = "2",
                             Name = "Creator",
                             NormalizedName = "Creator"
                         },
                         new
                         {
-                            Id = "ff4b781c-dead-4a12-a0d3-2c97d9625812",
+                            Id = "3f4011f1-9d16-4f6e-b199-b01dcf8e2dc6",
                             ConcurrencyStamp = "3",
                             Name = "Audience",
                             NormalizedName = "Audience"
@@ -390,13 +390,11 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.ContentFile", b =>
                 {
-                    b.HasOne("Data.Entities.Content", "Content")
+                    b.HasOne("Data.Entities.Content", null)
                         .WithMany("ContentFiles")
                         .HasForeignKey("ContentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Content");
                 });
 
             modelBuilder.Entity("Data.Entities.UserSubscriptionPlan", b =>

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Data.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateInitial : Migration
+    public partial class InitialWithContentTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -178,6 +178,29 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Contents",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsPaid = table.Column<bool>(type: "bit", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true),
+                    IsPublic = table.Column<bool>(type: "bit", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Contents_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserSubscriptionPlans",
                 columns: table => new
                 {
@@ -207,19 +230,40 @@ namespace Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ContentFiles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContentType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContentFiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ContentFiles_Contents_ContentId",
+                        column: x => x.ContentId,
+                        principalTable: "Contents",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "2fd5546d-fd58-4ae5-b0c8-4c2c41a9b509", "3", "Audience", "Audience" },
-                    { "e893a213-293f-4281-b2dd-49275e4b76b4", "2", "Creator", "Creator" }
+                    { "3f4011f1-9d16-4f6e-b199-b01dcf8e2dc6", "3", "Audience", "Audience" },
+                    { "6021ebe1-6f66-4eb2-a048-e732e39be5d2", "2", "Creator", "Creator" }
                 });
 
             migrationBuilder.InsertData(
                 table: "SubscriptionPlans",
                 columns: new[] { "Id", "Details", "IsActive", "MonthlyAmount", "YearlyAmount" },
-                values: new object[] { new Guid("c9c939f4-1bea-493e-b117-a8d1bc5d588e"), "Basic plan", true, 3.9900000000000002, 39.990000000000002 });
+                values: new object[] { new Guid("00f259ca-eec6-4657-9553-29a8855f5a37"), "Basic plan", true, 3.9900000000000002, 39.990000000000002 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -261,6 +305,16 @@ namespace Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ContentFiles_ContentId",
+                table: "ContentFiles",
+                column: "ContentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Contents_UserId",
+                table: "Contents",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserSubscriptionPlans_SubscriptionId",
                 table: "UserSubscriptionPlans",
                 column: "SubscriptionId");
@@ -290,16 +344,22 @@ namespace Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ContentFiles");
+
+            migrationBuilder.DropTable(
                 name: "UserSubscriptionPlans");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Contents");
 
             migrationBuilder.DropTable(
                 name: "SubscriptionPlans");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

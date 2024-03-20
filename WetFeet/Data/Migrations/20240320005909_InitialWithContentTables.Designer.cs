@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240319125401_CreateInitial")]
-    partial class CreateInitial
+    [Migration("20240320005909_InitialWithContentTables")]
+    partial class InitialWithContentTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -102,6 +102,65 @@ namespace Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.Content", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Contents");
+                });
+
+            modelBuilder.Entity("Data.Entities.ContentFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ContentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContentType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContentId");
+
+                    b.ToTable("ContentFiles");
+                });
+
             modelBuilder.Entity("Data.Entities.SubscriptionPlan", b =>
                 {
                     b.Property<Guid>("Id")
@@ -127,7 +186,7 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c9c939f4-1bea-493e-b117-a8d1bc5d588e"),
+                            Id = new Guid("00f259ca-eec6-4657-9553-29a8855f5a37"),
                             Details = "Basic plan",
                             IsActive = true,
                             MonthlyAmount = 3.9900000000000002,
@@ -203,14 +262,14 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e893a213-293f-4281-b2dd-49275e4b76b4",
+                            Id = "6021ebe1-6f66-4eb2-a048-e732e39be5d2",
                             ConcurrencyStamp = "2",
                             Name = "Creator",
                             NormalizedName = "Creator"
                         },
                         new
                         {
-                            Id = "2fd5546d-fd58-4ae5-b0c8-4c2c41a9b509",
+                            Id = "3f4011f1-9d16-4f6e-b199-b01dcf8e2dc6",
                             ConcurrencyStamp = "3",
                             Name = "Audience",
                             NormalizedName = "Audience"
@@ -323,6 +382,24 @@ namespace Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.Content", b =>
+                {
+                    b.HasOne("Data.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("Data.Entities.ContentFile", b =>
+                {
+                    b.HasOne("Data.Entities.Content", null)
+                        .WithMany("ContentFiles")
+                        .HasForeignKey("ContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Data.Entities.UserSubscriptionPlan", b =>
                 {
                     b.HasOne("Data.Entities.SubscriptionPlan", "SubscriptionPlan")
@@ -389,6 +466,11 @@ namespace Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Data.Entities.Content", b =>
+                {
+                    b.Navigation("ContentFiles");
                 });
 #pragma warning restore 612, 618
         }
