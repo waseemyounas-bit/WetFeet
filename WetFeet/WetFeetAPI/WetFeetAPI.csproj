@@ -30,6 +30,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\UserProfile\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\UserProfile\1381باقة-توليب-tulip-bouquet_بيان-المنتج---Google-Chrome_-28_12_44-09_24_50-م--2-_d60b.png" />
+    <None Include="wwwroot\UserProfile\1483clothes11473928353466-Roadster-Men-Black-Regular-Fit-Checked-Casual-Shirt-4501473928353310-1_29c5.jpg" />
+    <None Include="wwwroot\UserProfile\1483clothes11473928353466-Roadster-Men-Black-Regular-Fit-Checked-Casual-Shirt-4501473928353310-1_5763.jpg" />
+    <None Include="wwwroot\UserProfile\1483clothes11473928353466-Roadster-Men-Black-Regular-Fit-Checked-Casual-Shirt-4501473928353310-1_8be0.jpg" />
+    <None Include="wwwroot\UserProfile\1483clothes11473928353466-Roadster-Men-Black-Regular-Fit-Checked-Casual-Shirt-4501473928353310-1_99a9.jpg" />
+    <None Include="wwwroot\Images\test.jpg" />
+    <None Include="wwwroot\UserProfile\1733dddddddd11473928353466-Roadster-Men-Black-Regular-Fit-Checked-Casual-Shirt-4501473928353310-1_8f8c.jpg" />
+    <None Include="wwwroot\UserProfile\6باقة-توليب-tulip-bouquet_بيان-المنتج---Google-Chrome_-28_12_44-09_23_12-م--2-_6af9.png" />
+    <None Include="wwwroot\UserProfile\6باقة-توليب-tulip-bouquet_بيان-المنتج---Google-Chrome_-28_12_44-09_23_12-م--2-_deae.png" />
     <Folder Include="Images\" />
     <Folder Include="Contents\" />
     <Folder Include="wwwroot\" />

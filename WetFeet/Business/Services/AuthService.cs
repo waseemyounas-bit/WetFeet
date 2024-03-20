@@ -63,9 +63,11 @@ namespace Business.Services
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
-                Password=user.PasswordHash,
-                About=user.About,
-                ImageName=user.ImageName
+                Password = user.PasswordHash,
+                About = user.About,
+                ImageName = user.ImageName,
+                Website = user.Website
+                
             };
 
             var loginResponseDto = new LoginResponseDto()
@@ -80,8 +82,8 @@ namespace Business.Services
         {
             ApplicationUser appUser = new()
             {
-                FirstName=registrationDto.FirstName,
-                LastName=registrationDto.LastName,
+                FirstName = registrationDto.FirstName,
+                LastName = registrationDto.LastName,
                 UserName = registrationDto.Email,
                 Email = registrationDto.Email,
                 NormalizedEmail = registrationDto.Email.ToUpper(),
@@ -103,9 +105,9 @@ namespace Business.Services
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         PhoneNumber = user.PhoneNumber,
-                        ImageName=user.ImageName,
-                        Password=user.PasswordHash,
-                        About=user.About
+                        ImageName = user.ImageName,
+                        Password = user.PasswordHash,
+                        About = user.About
                     };
 
                     return "";
@@ -122,13 +124,36 @@ namespace Business.Services
 
             return "An Error Occured";
         }
+        public async Task<string> UpdateUser(RegistrationDto registrationDto)
+        {
+            try
+            {
 
-        public async Task<string> GetUserIdByEmail(string email)
+                var user = this._dbContext.ApplicationUsers.First(x => x.UserName == registrationDto.Email);
+
+                user.FirstName = registrationDto.FirstName;
+                user.LastName = registrationDto.LastName;
+                user.PhoneNumber = registrationDto.PhoneNumber;
+                user.ImageName = registrationDto.ImageName;
+                user.About = registrationDto.About;
+                user.Website = registrationDto.Website;
+
+                _dbContext.ApplicationUsers.Update(user);
+                _dbContext.SaveChanges();
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        public async Task<ApplicationUser> GetUserIdByEmail(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if(user != null)
-                return user.Id;
-            return "";
+            if (user == null)
+                return new ApplicationUser();
+            return user;
         }
     }
 }

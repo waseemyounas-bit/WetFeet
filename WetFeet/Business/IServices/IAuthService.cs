@@ -1,4 +1,5 @@
 ﻿using Data.Dtos;
+using Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace Business.IServices
     {
         Task<LoginResponseDto> Login(LoginDto loginDto);
         Task<String> Register(RegistrationDto registrationDto);
+        Task<String> UpdateUser(RegistrationDto registrationDto);
         Task<bool> AssignRole(string email, string role);
-        Task<string> GetUserIdByEmail(string email);
+        Task<ApplicationUser> GetUserIdByEmail(string email);
     }
 }

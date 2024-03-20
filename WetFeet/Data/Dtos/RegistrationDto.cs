@@ -11,16 +11,16 @@ namespace Data.Dtos
 {
     public class RegistrationDto
     {
+        public string Id { get; set; }
         [Required]
         public string Email { get; set; }
-        [NotMapped]
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
         [Required]
         public string Password { get; set; }
         [NotMapped]
-        public IFormFile Pic { get; set; }
+        public IFormFile? Pic { get; set; }
         public string ImageName { get; set; }
         public string? Website { get; set; }
         public string About { get; set; }

@@ -16,5 +16,6 @@ namespace Data.Entities
         public string? LastName { get; set; }
         public string? About { get; set; }
         public string? ImageName { get; set; }
+        public string? Website { get; set; }
     }
 }
