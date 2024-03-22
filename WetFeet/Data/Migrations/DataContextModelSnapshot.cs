@@ -102,78 +102,6 @@ namespace Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Data.Entities.SubscriptionPlan", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Details")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<double>("MonthlyAmount")
-                        .HasColumnType("float");
-
-                    b.Property<double>("YearlyAmount")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SubscriptionPlans");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("1f728658-0374-47d0-8473-444f2c20259d"),
-                            Details = "Basic plan",
-                            IsActive = true,
-                            MonthlyAmount = 3.9900000000000002,
-                            YearlyAmount = 39.990000000000002
-                        });
-                });
-
-            modelBuilder.Entity("Data.Entities.UserSubscriptionPlan", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ActivatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("SubscriptionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SubscriptionId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserSubscriptionPlans");
-                });
-
             modelBuilder.Entity("Data.Entities.Content", b =>
                 {
                     b.Property<Guid>("Id")
@@ -233,6 +161,51 @@ namespace Data.Migrations
                     b.ToTable("ContentFiles");
                 });
 
+            modelBuilder.Entity("Data.Entities.Payment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsPaymentReleased")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsTransferred")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("PaidAmount")
+                        .HasColumnType("float");
+
+                    b.Property<string>("PaymentReceipt")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StripePaymentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("TransferDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid?>("UserSubscriptionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserSubscriptionId");
+
+                    b.ToTable("Payments");
+                });
+
             modelBuilder.Entity("Data.Entities.SubscriptionPlan", b =>
                 {
                     b.Property<Guid>("Id")
@@ -258,7 +231,7 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("00f259ca-eec6-4657-9553-29a8855f5a37"),
+                            Id = new Guid("14c5ffe7-ca6b-49ed-990d-c55099b0a3c3"),
                             Details = "Basic plan",
                             IsActive = true,
                             MonthlyAmount = 3.9900000000000002,
@@ -334,14 +307,14 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6021ebe1-6f66-4eb2-a048-e732e39be5d2",
+                            Id = "ee720c2c-6fea-474f-b7cb-2c6bfd6fe146",
                             ConcurrencyStamp = "2",
                             Name = "Creator",
                             NormalizedName = "Creator"
                         },
                         new
                         {
-                            Id = "3f4011f1-9d16-4f6e-b199-b01dcf8e2dc6",
+                            Id = "44f31f8a-765e-495a-8efa-52937683a671",
                             ConcurrencyStamp = "3",
                             Name = "Audience",
                             NormalizedName = "Audience"
@@ -470,6 +443,21 @@ namespace Data.Migrations
                         .HasForeignKey("ContentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Data.Entities.Payment", b =>
+                {
+                    b.HasOne("Data.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.HasOne("Data.Entities.UserSubscriptionPlan", "UserSubscriptionPlan")
+                        .WithMany()
+                        .HasForeignKey("UserSubscriptionId");
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("UserSubscriptionPlan");
                 });
 
             modelBuilder.Entity("Data.Entities.UserSubscriptionPlan", b =>

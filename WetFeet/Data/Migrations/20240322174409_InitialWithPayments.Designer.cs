@@ -12,13 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-<<<<<<<< HEAD:WetFeet/Data/Migrations/20240320005909_InitialWithContentTables.Designer.cs
-    [Migration("20240320005909_InitialWithContentTables")]
-    partial class InitialWithContentTables
-========
-    [Migration("20240316183402_initiail")]
-    partial class initiail
->>>>>>>> 7d0875610d4c3bc4ea78debf8a6d3ff6b13cc61f:WetFeet/Data/Migrations/20240316183402_initiail.Designer.cs
+    [Migration("20240322174409_InitialWithPayments")]
+    partial class InitialWithPayments
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -169,6 +164,46 @@ namespace Data.Migrations
                     b.ToTable("ContentFiles");
                 });
 
+            modelBuilder.Entity("Data.Entities.Payment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsPaymentReleased")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsTransferred")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("PaidAmount")
+                        .HasColumnType("float");
+
+                    b.Property<string>("PaymentReceipt")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StripePaymentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("TransferDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Payments");
+                });
+
             modelBuilder.Entity("Data.Entities.SubscriptionPlan", b =>
                 {
                     b.Property<Guid>("Id")
@@ -194,11 +229,7 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-<<<<<<<< HEAD:WetFeet/Data/Migrations/20240320005909_InitialWithContentTables.Designer.cs
-                            Id = new Guid("00f259ca-eec6-4657-9553-29a8855f5a37"),
-========
-                            Id = new Guid("1f728658-0374-47d0-8473-444f2c20259d"),
->>>>>>>> 7d0875610d4c3bc4ea78debf8a6d3ff6b13cc61f:WetFeet/Data/Migrations/20240316183402_initiail.Designer.cs
+                            Id = new Guid("d100c7cc-0996-4dd4-b22d-592e66fc4ff1"),
                             Details = "Basic plan",
                             IsActive = true,
                             MonthlyAmount = 3.9900000000000002,
@@ -274,22 +305,14 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-<<<<<<<< HEAD:WetFeet/Data/Migrations/20240320005909_InitialWithContentTables.Designer.cs
-                            Id = "6021ebe1-6f66-4eb2-a048-e732e39be5d2",
-========
-                            Id = "50874ac7-36e7-46fd-b31e-a2a62a6824f9",
->>>>>>>> 7d0875610d4c3bc4ea78debf8a6d3ff6b13cc61f:WetFeet/Data/Migrations/20240316183402_initiail.Designer.cs
+                            Id = "b746ed4b-c759-47a7-8239-95971b7fec27",
                             ConcurrencyStamp = "2",
                             Name = "Creator",
                             NormalizedName = "Creator"
                         },
                         new
                         {
-<<<<<<<< HEAD:WetFeet/Data/Migrations/20240320005909_InitialWithContentTables.Designer.cs
-                            Id = "3f4011f1-9d16-4f6e-b199-b01dcf8e2dc6",
-========
-                            Id = "07893eac-87d7-48fb-8f02-006fc2e7fcd9",
->>>>>>>> 7d0875610d4c3bc4ea78debf8a6d3ff6b13cc61f:WetFeet/Data/Migrations/20240316183402_initiail.Designer.cs
+                            Id = "210a0d41-eac3-4bb2-bb89-0da46bc04c52",
                             ConcurrencyStamp = "3",
                             Name = "Audience",
                             NormalizedName = "Audience"
@@ -418,6 +441,15 @@ namespace Data.Migrations
                         .HasForeignKey("ContentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Data.Entities.Payment", b =>
+                {
+                    b.HasOne("Data.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("Data.Entities.UserSubscriptionPlan", b =>

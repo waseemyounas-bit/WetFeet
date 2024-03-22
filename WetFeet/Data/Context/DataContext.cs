@@ -23,6 +23,7 @@ namespace Data.Context
         public DbSet<UserSubscriptionPlan> UserSubscriptionPlans { get; set; }
         public DbSet<Content> Contents { get; set; }
         public DbSet<ContentFile> ContentFiles { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

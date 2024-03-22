@@ -12,6 +12,7 @@ namespace WetFeetAPI
             {
                 config.CreateMap<SubscriptionPlan, SubscriptionPlanDto>().ReverseMap();
                 config.CreateMap<Content, ContentDto>();
+                config.CreateMap<UserSubscriptionPlan, UserSubscriptionPlanDto>();
             }
             );
 

@@ -3,14 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Data.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:WetFeet/Data/Migrations/20240320005909_InitialWithContentTables.cs
-    public partial class InitialWithContentTables : Migration
-========
-    public partial class userauthweb : Migration
->>>>>>>> 7d0875610d4c3bc4ea78debf8a6d3ff6b13cc61f:WetFeet/Data/Migrations/20240316183118_userauthweb.cs
+    public partial class InitialWithPayments : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -181,7 +179,6 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-<<<<<<<< HEAD:WetFeet/Data/Migrations/20240320005909_InitialWithContentTables.cs
                 name: "Contents",
                 columns: table => new
                 {
@@ -199,6 +196,31 @@ namespace Data.Migrations
                     table.PrimaryKey("PK_Contents", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Contents_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Payments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PaidAmount = table.Column<double>(type: "float", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    StripePaymentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PaymentReceipt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsPaymentReleased = table.Column<bool>(type: "bit", nullable: true),
+                    IsTransferred = table.Column<bool>(type: "bit", nullable: true),
+                    TransferDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Payments_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
@@ -260,43 +282,14 @@ namespace Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "3f4011f1-9d16-4f6e-b199-b01dcf8e2dc6", "3", "Audience", "Audience" },
-                    { "6021ebe1-6f66-4eb2-a048-e732e39be5d2", "2", "Creator", "Creator" }
-========
-                name: "UserSubscriptionPlans",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Amount = table.Column<double>(type: "float", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true),
-                    ActivatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    SubscriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserSubscriptionPlans", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserSubscriptionPlans_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_UserSubscriptionPlans_SubscriptionPlans_SubscriptionId",
-                        column: x => x.SubscriptionId,
-                        principalTable: "SubscriptionPlans",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
->>>>>>>> 7d0875610d4c3bc4ea78debf8a6d3ff6b13cc61f:WetFeet/Data/Migrations/20240316183118_userauthweb.cs
+                    { "210a0d41-eac3-4bb2-bb89-0da46bc04c52", "3", "Audience", "Audience" },
+                    { "b746ed4b-c759-47a7-8239-95971b7fec27", "2", "Creator", "Creator" }
                 });
 
             migrationBuilder.InsertData(
                 table: "SubscriptionPlans",
                 columns: new[] { "Id", "Details", "IsActive", "MonthlyAmount", "YearlyAmount" },
-                values: new object[] { new Guid("00f259ca-eec6-4657-9553-29a8855f5a37"), "Basic plan", true, 3.9900000000000002, 39.990000000000002 });
+                values: new object[] { new Guid("d100c7cc-0996-4dd4-b22d-592e66fc4ff1"), "Basic plan", true, 3.9900000000000002, 39.990000000000002 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -338,7 +331,6 @@ namespace Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-<<<<<<<< HEAD:WetFeet/Data/Migrations/20240320005909_InitialWithContentTables.cs
                 name: "IX_ContentFiles_ContentId",
                 table: "ContentFiles",
                 column: "ContentId");
@@ -349,8 +341,11 @@ namespace Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-========
->>>>>>>> 7d0875610d4c3bc4ea78debf8a6d3ff6b13cc61f:WetFeet/Data/Migrations/20240316183118_userauthweb.cs
+                name: "IX_Payments_UserId",
+                table: "Payments",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserSubscriptionPlans_SubscriptionId",
                 table: "UserSubscriptionPlans",
                 column: "SubscriptionId");
@@ -380,12 +375,12 @@ namespace Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-<<<<<<<< HEAD:WetFeet/Data/Migrations/20240320005909_InitialWithContentTables.cs
                 name: "ContentFiles");
 
             migrationBuilder.DropTable(
-========
->>>>>>>> 7d0875610d4c3bc4ea78debf8a6d3ff6b13cc61f:WetFeet/Data/Migrations/20240316183118_userauthweb.cs
+                name: "Payments");
+
+            migrationBuilder.DropTable(
                 name: "UserSubscriptionPlans");
 
             migrationBuilder.DropTable(
@@ -399,9 +394,6 @@ namespace Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "SubscriptionPlans");
         }
     }
 }

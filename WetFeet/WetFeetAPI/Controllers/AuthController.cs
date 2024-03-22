@@ -122,7 +122,7 @@ namespace WetFeetAPI.Controllers
         }
 
         [HttpPost("registeraudience")]
-        public async Task<IActionResult> RegisterAudience([FromBody] RegistrationAudienceDto model)
+        public async Task<IActionResult> RegisterAudience([FromForm] RegistrationAudienceDto model)
         {
             var result = await _authService.Register(model.RegistrationDto);
             if (!string.IsNullOrEmpty(result))
@@ -131,7 +131,7 @@ namespace WetFeetAPI.Controllers
                 _response.Message = result;
                 return BadRequest(_response);
             }
-            _response.Result = model;
+            
             await _authService.AssignRole(model.RegistrationDto.Email, model.RegistrationDto.Role.ToUpper());
 
             var user = await _authService.GetUserIdByEmail(model.RegistrationDto.Email);
@@ -147,7 +147,8 @@ namespace WetFeetAPI.Controllers
                 ActivatedDate = DateTime.UtcNow
             };
             this._subscriptionService.AddUserSubscriptionPlan(userSubscriptionPlan);
-            
+            //var plans = this._subscriptionService.GetUserSubscriptionPlans(user.Id).FirstOrDefault();
+            _response.Result = this._mapper.Map<UserSubscriptionPlanDto>(userSubscriptionPlan);
             return Ok(_response);
         }
 

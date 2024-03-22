@@ -8,6 +8,7 @@ using DataAccess.Repository;
 using DataAccess.UoW;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SponsorId.StripeMiddleWare;
 using System;
 using WetFeetAPI;
 
@@ -37,6 +38,9 @@ builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddCors();
 builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 builder.Services.AddScoped<IContentService, ContentService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+
+builder.Services.AddStripeInfrastructure(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
